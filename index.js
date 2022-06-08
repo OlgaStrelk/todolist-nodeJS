@@ -114,6 +114,7 @@ const submitSuccessMarkup = `
     </html>
 `;
 
+let todos = [];
 const server = http.createServer((req, res) => {
   if (req.url === "/" && req.method === "GET") {
     res.writeHead(200, {
@@ -129,6 +130,8 @@ const server = http.createServer((req, res) => {
       body += chunk;
     });
     req.on("end", () => {
+      todos.push(body.split('=')[1]);
+
       res.writeHead(200, {
         "Content-Type": "text/html",
       });
