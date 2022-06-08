@@ -76,16 +76,66 @@ const mainPageMarkup = `
   </html>
 `;
 
+const submitSuccessMarkup = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="style.css">
+        <title>Список дел</title>
+        <style>
+            html, body {
+                font-family: Helvetica, Arial, sans-serif;
+                -webkit-font-smoothing: antialiased;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                margin: 0;
+            }
+
+            .container {
+                width: 468px;
+                margin: 0 auto;
+                padding-top: 100px;
+            }
+
+            h1 {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Форма успешно отправлена</h1>
+            <a href="${BASE_PATH}">Вернуться назад</a>
+        </div>
+    </body>
+    </html>
+`;
+
 const server = http.createServer((req, res) => {
-  if (req.url === '/' && req.method === 'GET')
-  {
+  if (req.url === "/" && req.method === "GET") {
     res.writeHead(200, {
-  'Content-Type': 'text/html'
-});
+      "Content-Type": "text/html",
+    });
 
     res.end(mainPageMarkup);
   }
-  })
 
+  if (req.url === "/submit" && req.method === "POST") {
+    let body = '';
+    req.on("data", (chunk) => {
+      body += chunk;
+    });
+    req.on("end", () => {
+      res.writeHead(200, {
+        "Content-Type": "text/html",
+      });
 
-server.listen(3000)
+      res.end(submitSuccessMarkup);
+    });
+  }
+});
+
+server.listen(3000);
